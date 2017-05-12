@@ -1,0 +1,23 @@
+###############################################
+#目标：依赖
+#	编译命令
+
+CFLAGS = -c -g -Wall
+LDFLAGS = 
+CPPFLAGS = -I./
+
+obj = main.o add.o sub.o mul.o dive.o
+
+
+app:$(obj)
+#	gcc main.o add.o sub.o mul.o dive.o -o app
+	gcc $^ -o $@
+
+%.o:%.c
+	gcc $(CFLAGS) $(CPPFLAGS) $< -o $@
+
+abc:
+	echo $(obj)
+#################################################
+
+

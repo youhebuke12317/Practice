@@ -1,0 +1,5 @@
+target:main.c add.c mul.c sub.c dive.c
+	gcc main.c add.c mul.c sub.c dive.c -o app
+
+clean:
+	rm app

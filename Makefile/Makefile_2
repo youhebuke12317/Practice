@@ -1,0 +1,24 @@
+app:main.o add.o mul.o sub.o dive.o
+	gcc main.o add.o mul.o sub.o dive.o -o app
+
+main.o:main.c
+	gcc -c main.c
+
+add.o:add.c
+	gcc -c add.c
+
+mul.o:mul.c
+	gcc -c mul.c
+
+sub.o:sub.c
+	gcc -c sub.c
+
+dive.o:dive.c
+	gcc -c dive.c
+
+clean:
+	rm app *.o
+#########################################
+
+#app:main.o add.o mul.o sub.o dive.o
+#	gcc main.o add.o mul.o sub.o dive.o -o app
