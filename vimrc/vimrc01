@@ -1,0 +1,63 @@
+syntax enable
+set background=dark
+"colorscheme solarized
+set nu!
+syntax on
+set autoindent
+set cindent
+set smartindent
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set ai!
+set ruler
+set incsearch
+
+set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936
+set termencoding=utf-8
+set encoding=utf-8
+"set mouse=a
+
+
+autocmd BufNewFile *.c,*.h, exec ":call SetTitle()"
+let $author_name = "zhengli"
+let $author_email = "*******"
+
+func SetTitle()
+	if &filetype == 'h'
+	call setline(1,          "\/*******************************************************************")
+	call append(line("."),   "\ ** Copyright(c) 2016,哈尔滨工程大学信息安全研究中心")
+	call append(line(".")+1, "\ ** All rights reserved")
+	call append(line(".")+2, "\ ** ")
+	call append(line(".")+3, "\ ** 文件名: ".expand("%"))
+	call append(line(".")+4, "\ ** 创建人: ".$author_name)
+	call append(line(".")+5, "\ ** 描  述: ")
+	call append(line(".")+6, "\ ** 注  意: ")
+	call append(line(".")+7, "\ ** ")
+	call append(line(".")+8, "\ ** 当前版本：v1.0")
+	call append(line(".")+9, "\ ** 作    者：".$author_name)
+	call append(line(".")+10, "\ ** 邮    箱: ".$author_email)
+	call append(line(".")+11, "\ ** 创建时间: ".strftime("%c"))
+	call append(line(".")+12, "\ ** 完成日期: ")
+	call append(line(".")+13, "\ ******************************************************************/ ")
+	call append(line(".")+14, "")
+	call append(line(".")+15, "\#include	<stdio.h>")
+	else
+		call setline(1,          "\/*******************************************************************")
+		call append(line("."),   "\ ** Copyright(c) 2016,哈尔滨工程大学信息安全研究中心")
+		call append(line(".")+1, "\ ** All rights reserved")
+		call append(line(".")+2, "\ ** ")
+		call append(line(".")+3, "\ ** 文件名: ".expand("%"))
+		call append(line(".")+4, "\ ** 创建人: ".$author_name)
+		call append(line(".")+5, "\ ** 描  述: ")
+		call append(line(".")+6, "\ ** 注  意: ")
+		call append(line(".")+7, "\ ** ")
+		call append(line(".")+8, "\ ** 当前版本：v1.0")
+		call append(line(".")+9, "\ ** 作    者：".$author_name)
+		call append(line(".")+10, "\ ** 邮    箱: ".$author_email)
+		call append(line(".")+11, "\ ** 创建时间: ".strftime("%c"))
+		call append(line(".")+12, "\ ** 完成日期: ")
+		call append(line(".")+13, "\ ******************************************************************/ ")
+		call append(line(".")+14, "")
+		endif
+		endfunc
