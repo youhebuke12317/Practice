@@ -1,0 +1,28 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+Accept	wrap.c	/^Accept(int fd, struct sockaddr *sa, socklen_t *salenptr)$/;"	f
+Bind	wrap.c	/^Bind(int fd, struct sockaddr *sa, socklen_t salen)$/;"	f
+Close	wrap.c	/^Close(int fd)$/;"	f
+Connect	wrap.c	/^Connect(int fd, struct sockaddr *sa, socklen_t salen)$/;"	f
+Epoll_create	wrap.c	/^Epoll_create(int size)$/;"	f
+Epoll_ctl	wrap.c	/^Epoll_ctl(int efd, int op, int fd, struct epoll_event *event)$/;"	f
+Epoll_wait	wrap.c	/^Epoll_wait(int efd, struct epoll_event *events, int maxevents, int timeout)$/;"	f
+Listen	wrap.c	/^Listen(int fd, int backlog)$/;"	f
+MAXLINE	test_poll_serv.c	32;"	d	file:
+OPEN_MAX	test_poll_serv.c	34;"	d	file:
+Read	wrap.c	/^Read(int fd, void *ptr, size_t nbytes)$/;"	f
+Readline	wrap.c	/^Readline(int fd, void *vptr, size_t maxlen)$/;"	f
+Readn	wrap.c	/^Readn(int fd, void *vptr, size_t n)$/;"	f
+SA	test_poll_serv.c	35;"	d	file:
+SERV_PORT	test_poll_serv.c	33;"	d	file:
+Socket	wrap.c	/^Socket(int family, int type, int protocol)$/;"	f
+Write	wrap.c	/^Write(int fd, const void *ptr, size_t nbytes)$/;"	f
+Writen	wrap.c	/^Writen(int fd, const void *vptr, size_t n)$/;"	f
+__WRAP_H_	wrap.h	21;"	d
+main	test_poll_serv.c	/^main(int argc, char *argv[])$/;"	f
+my_read	wrap.c	/^my_read(int fd, char *ptr)$/;"	f	file:
+perr_exit	wrap.c	/^perr_exit(const char *s)$/;"	f
