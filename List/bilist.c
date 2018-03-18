@@ -1,113 +1,152 @@
-#include"bilist.h"
-#include	<pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <dirent.h>
+#include <dlfcn.h>
+#include <stdint.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <pthread.h>
+
+#include "BiList.h"
 
 
-void list_init(list *l)
+/*
+ * 链表初始化
+ * */
+void List_Init(list *l)
 {
-    l->count=0;
-    l->front=NULL;
-    l->rear=NULL;
+	if (!l)	return ;
+
+    l -> count = 0;
+    l -> front = NULL;
+    l -> rear  = NULL;
 }
 
 
-void Queue_init(list *Q)
+/*
+ * 链表初始化: 带条件变量和互斥变量的初始化
+ * */
+void Queue_Init(list *Q)
 {
-    pthread_mutex_init(&Q->qlock,NULL);
-    pthread_cond_init(&Q->qready,NULL);
-    Q->front=NULL;
-    Q->rear=NULL;
+    pthread_mutex_init(&Q -> qlock,  NULL);
+    pthread_cond_init (&Q -> qready, NULL);
+
+	Q -> count = 0;
+    Q -> front = NULL;
+    Q -> rear  = NULL;
 }
 
-//入队
-void list_append(list *l,list_node *node)
+/*
+ * 队列操作：入队
+ * 从链表队列 尾 加入节点
+ * */
+void List_Append(list *l, list_node *node)
 {
-    node->prev=l->rear;
-    node->next=NULL;
-    if(l->front==NULL)
-    {
-        l->front=node;
+    node -> prev = l -> rear;
+    node -> next = NULL;
+
+    if(l -> front == NULL) {
+        l -> front = node;
+    } else {
+        l -> rear -> next = node;
     }
-    else
-    {
-        l->rear->next=node;
-    }
-    l->rear=node;
-    l->count++;
+
+    l -> rear = node;
+    l -> count++;
 }
 
-//出队
-list_node *list_pop(list *l)
+/*
+ * 队列操作：出队
+ * 从链表队列 头 删除节点
+ * */
+list_node *List_Pop(list *l)
 {
-    if(l->front==NULL)
+	list_node *ptr;
+
+    if(l -> front == NULL)
         return NULL;
-    list_node  *r=l->front;
-    l->front=l->front->next;
-    if (l->front == NULL)
-    {
-        l->rear=NULL;
-    }
-    else
-        l->front->prev=NULL;
-    l->count--;
-    return r;
+
+    ptr		  	    = l -> front;
+    l -> front      = l -> front->next;
+
+    if (l -> front == NULL) {
+        l -> rear = NULL;
+    } else {
+        l -> front -> prev = NULL;
+	}
+
+    l -> count--;
+
+    return ptr;
 }
 
-void  list_push(list *l,list_node *node)
+
+
+
+void  List_Push(list *l, list_node *node)
 {
-    if(l->front==NULL)
-    {
-       l->front=node;
-       l->rear=node;
+    if(l -> front == NULL) {
+       l -> front = node;
+       l -> rear  = node;
+    } else {
+        node -> next	   = l -> front;
+        l -> front -> prev = node;
+        l -> front         = node;
+        node -> prev       = NULL;
     }
-    else
-    {
-        node->next=l->front;
-        l->front->prev=node;
-        l->front=node;
-        node->prev=NULL;
-    }
-    l->count++;
+
+    l -> count++;
 }
 
 
-void list_del(list *l,list_node *node)
+void List_Del(list *l, list_node *node)
 {
-    if(node->prev==NULL)
-    {
-        l->front=node->next;
+    if(node -> prev == NULL) {
+        l -> front = node -> next;
+    } else {
+        node -> prev -> next = node -> next;
     }
-    else
-    {
-        node->prev->next=node->next;
+
+    if(node -> next == NULL) {
+        l -> rear = node -> prev;
+    } else {
+        node -> next -> prev = node -> prev;
     }
-    if(node->next==NULL)
-    {
-        l->rear=node->prev;
-    }
-    else
-    {
-        node->next->prev=node->prev;
-    }
+
     l->count--;
 }
 
 
+
+//取结果
 list_node  *DeQueueLock(list *Q)
-{//取结果
-    pthread_mutex_lock(&Q->qlock);
-    while(Q->front==NULL)
-        pthread_cond_wait(&Q->qready,&Q->qlock);
-    list_node *p=list_pop(Q);
-    pthread_mutex_unlock(&Q->qlock);
+{
+    pthread_mutex_lock(&(Q -> qlock));
+
+    while(Q -> front == NULL)
+        pthread_cond_wait(&(Q -> qready), &(Q -> qlock));
+
+    list_node *p = List_Pop(Q);
+
+    pthread_mutex_unlock(&(Q -> qlock));
+
     return p;
 }
 
-void EnQueueLock(list *Q,list_node *node)
-{//入队，存结果
-    pthread_mutex_lock(&Q->qlock);
-    list_append(Q,node);
-    pthread_cond_signal(&Q->qready);
-    pthread_mutex_unlock(&Q->qlock);
+//入队，存结果
+void EnQueueLock(list *Q, list_node *node)
+{
+    pthread_mutex_lock(&(Q -> qlock));
+
+    List_Append(Q, node);
+
+    pthread_cond_signal(&(Q-> qready));
+
+    pthread_mutex_unlock(&(Q-> qlock));
 }
 
 

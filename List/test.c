@@ -14,24 +14,26 @@
  ** 完成日期: 
  ******************************************************************/ 
 
-#include	"bilist.h"
-#include	<pthread.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+#include "BiList.h"
 
 #define BLACK_LIST 0
 #define WHITE_LIST 1
 
-typedef struct 
-{
+typedef struct {
 	list_node node;
 	char ip[128];
 	char url[128];
 	int type;
 }log_t;
 
+static list Queue;
 
-void *thr_add_log(void* log);
-
-list Queue;
+static void *thr_add_log(void* log);
 
 
 #if 1
@@ -41,19 +43,22 @@ int main()
 	pthread_t pid_log;
 
 	//日志任务队列初始化
-	Queue_init(&Queue);
+	Queue_Init(&Queue);
 
 	//创建写日志线程
-	err = pthread_create(&pid_log, NULL, thr_add_log, NULL);
-	if(err != 0)
-	{
-		printf("create thr error\n");
-		strerror(err);
+	err = pthread_create(&pid_log, 
+			NULL, 
+			thr_add_log, 
+			NULL);
+	if(err != 0) {
+		printf("create thr error: %s\n", strerror(err));
 		return -1;	
+	} else {
+		printf("thread of thr_add_log is runing\n");
 	}
 
 
-	//添加任务
+	//添加任务 1
 	char *ip01  = "192.168.121.1";
 	char *url01 = "www.baidu.com";
 	int  type01 = WHITE_LIST;
@@ -65,6 +70,7 @@ int main()
 	log->type = type01;
 	EnQueueLock(&Queue, &log->node);
 
+	//添加任务 2
 	char *ip02  = "192.168.121.2";
 	char *url02 = "www.sina.com.cn";
 	int  type02 = BLACK_LIST;
@@ -76,9 +82,9 @@ int main()
 
 	EnQueueLock(&Queue, &log->node);
 
-
 	sleep(2);
 
+	//添加任务 3
 	char *ip04  = "192.168.121.4";
 	char *url04 = "www.aaaa.com";
 	int  type04 = WHITE_LIST;
@@ -90,24 +96,28 @@ int main()
 
 	EnQueueLock(&Queue, &log->node);
 
+
 	sleep(50);
 	return 0;
 }
 
 
-void *thr_add_log(void* log)
+static void *thr_add_log(void* log)
 {
-	list_node *node;
-	log_t *tack_log;
-	while(1)
-	{
-		node = DeQueueLock(&Queue);	
+	list_node	*node;
+	log_t		*tack_log;
+
+	while(1) {
+		node	 = DeQueueLock(&Queue);	
+
 		tack_log = (log_t*)node;
+		
 		printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
 		printf("ip: %s, url: %s, type: %d\n", 
 				tack_log->ip, 
 				tack_log->url,
 				tack_log->type);
+
 		usleep(1000);
 	}
 	return NULL;

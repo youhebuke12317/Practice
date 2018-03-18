@@ -1,2 +1,2 @@
-app:test.c bilist.c
+app:test.c BiList.c
 	gcc -o $@ $^ -g -Wall -lpthread
